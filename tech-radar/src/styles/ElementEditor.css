@@ -1,0 +1,98 @@
+.editor-container {
+    padding: 20px;
+    background: var(--ui-bg-card, #fff);
+    color: var(--ui-text-main, #1f2329);
+    border-radius: 16px;
+    max-width: 500px;
+    margin: auto;
+    border: 1px solid var(--ui-border-soft, rgba(30, 36, 46, 0.1));
+    box-shadow: var(--ui-shadow-lg, 0 12px 30px rgba(20, 28, 40, 0.1));
+}
+
+.editor-container h3 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.editor-form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--ui-text-muted, #667081);
+}
+
+.editor-form-input {
+    width: 100%;
+    padding: 10px;
+    background: var(--ui-bg-card, #fff);
+    border: 1px solid var(--ui-border-strong, rgba(30, 36, 46, 0.16));
+    color: var(--ui-text-main, #1f2329);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.editor-form-input:focus {
+    border-color: rgba(240, 188, 0, 0.8);
+    box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.2);
+}
+
+.editor-form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.editor-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.editor-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(0.98);
+}
+
+.editor-btn.save {
+    background: #ffcc00;
+    color: #1a1f26;
+}
+
+.editor-btn.cancel {
+    background: var(--ui-bg-soft, #eef1f5);
+    color: var(--ui-text-main, #1f2329);
+}
+
+.theme-dark .editor-container {
+    background: #212326;
+    color: #cccccc;
+    border-color: rgba(204, 204, 204, 0.16);
+}
+
+.theme-dark .editor-form-input {
+    background: #212326;
+    border-color: rgba(204, 204, 204, 0.28);
+    color: #cccccc;
+}
+
+.theme-dark .editor-btn.cancel {
+    background: #111111;
+    color: #cccccc;
+    border: 1px solid rgba(204, 204, 204, 0.2);
+}
+
+.editor-form-error {
+    color: #ff4d4d;
+    font-size: 12px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    min-height: 15px;
+}

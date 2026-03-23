@@ -1,0 +1,139 @@
+.detail-view-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 52px;
+    width: 100%;
+    padding: 0 5%;
+}
+
+.detail-view-graphic {
+    width: 400px;
+    height: 400px;
+    flex-shrink: 0;
+}
+
+.detail-view-list {
+    min-width: 600px;
+    max-width: 800px;
+    max-height: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 20px 22px;
+}
+
+.detail-view-list-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.detail-view-ring-group {
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 14px;
+    background: #fafbfc;
+    padding: 0 10px;
+}
+
+.detail-view-ring-title {
+    border: none;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+    color: #2b3038;
+}
+
+.detail-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.detail-list-item {
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 10px;
+    transition: background-color 0.2s ease;
+    color: #2f3540;
+    border: none;
+}
+
+.detail-list-item:hover {
+    background: rgba(30, 36, 46, 0.06);
+}
+
+.detail-view-columns {
+    display: flex;
+    gap: 20px; 
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.detail-view-column {
+    flex: 1; 
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+.detail-view-ring-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.detail-view-ring-title--expanded {
+    border-bottom: 1px solid rgba(30, 36, 46, 0.12);
+}
+
+.accordion-arrow {
+    transition: transform 0.2s ease-in-out;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.accordion-arrow.open {
+    transform: rotate(90deg);
+}
+
+.detail-list-item-empty {
+    opacity: 0.6;
+    padding: 8px 12px;
+    font-style: italic;
+}
+
+.theme-dark .detail-view-list {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.theme-dark .detail-view-ring-group {
+    background: #212326;
+    border: none;
+}
+
+.theme-dark .detail-view-ring-title,
+.theme-dark .detail-list-item,
+.theme-dark .detail-list-item-empty {
+    color: #f1f1f1;
+}
+
+.theme-dark .detail-view-ring-title--expanded {
+    border-bottom-color: rgba(241, 241, 241, 0.14);
+}
+
+.theme-dark .detail-list-item {
+    background: #212326;
+}
+
+.theme-dark .detail-list-item:hover {
+    background: #111111;
+}

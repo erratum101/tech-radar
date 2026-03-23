@@ -1,0 +1,181 @@
+.dropdown-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.dropdown-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--ui-text-muted, #5f6875);
+}
+
+.dropdown-button {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px;
+    background: var(--ui-bg-card, #fff);
+    border: 1px solid var(--ui-border-strong, rgba(30, 36, 46, 0.16));
+    color: var(--ui-text-main, #1f2329);
+    border-radius: 12px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.dropdown-button:hover {
+    background: var(--ui-bg-soft, #f2f3f5);
+    transform: translateY(-1px);
+}
+
+.dropdown-arrow {
+    width: 14px;
+    height: 7px;
+    transition: transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+    filter: brightness(0) saturate(100%);
+    opacity: 0.52;
+}
+
+.dropdown-button:hover .dropdown-arrow {
+    filter: brightness(0) saturate(100%);
+    opacity: 1;
+}
+
+.dropdown-arrow.open {
+    transform: rotate(180deg);
+    opacity: 1;
+}
+
+.dropdown-list {
+    display: block;
+    position: absolute;
+    width: 100%;
+    background: var(--ui-bg-card, #fff);
+    border: 1px solid var(--ui-border-strong, rgba(30, 36, 46, 0.16));
+    border-radius: 12px;
+    margin-top: 5px;
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-list-item {
+    display: block;
+    padding: 10px;
+    cursor: pointer;
+    color: var(--ui-text-main, #1f2329);
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdown-list-item:hover {
+    background-color: var(--ui-bg-soft, #f2f3f5);
+    color: var(--ui-text-main, #1f2329);
+}
+
+.multi-select-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.multi-select-item input[type="checkbox"] {
+    pointer-events: none;
+}
+
+.owners-dropdown-button {
+    background: var(--ui-bg-card, #fff);
+    color: var(--ui-text-main, #1f2329);
+    border: 1px solid var(--ui-border-strong, rgba(30, 36, 46, 0.16));
+    border-radius: 999px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.owners-dropdown-button:hover {
+    background: var(--ui-bg-soft, #f2f3f5);
+}
+
+.owners-dropdown-arrow {
+    margin-left: 4px;
+    width: 14px;
+    height: 7px;
+}
+.owners-dropdown-list ul{
+    margin: 0px;
+    padding: 0px;
+}
+.owners-dropdown-list {
+    display: block;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 5px;
+    background: var(--ui-bg-card, #fff);
+    border: 1px solid var(--ui-border-strong, rgba(30, 36, 46, 0.16));
+    border-radius: 12px;
+    padding: 8px;
+    z-index: 10;
+    min-width: 100px;
+    box-shadow: 0 12px 28px rgba(20, 28, 40, 0.14);
+    list-style: none;
+    color: var(--ui-text-main, #1f2329);
+}
+.owners-dropdown-list li {
+    display: block;
+    padding: 6px 8px;
+    white-space: nowrap;
+}
+
+.theme-dark .dropdown-label {
+    color: #636363;
+}
+
+.theme-dark .dropdown-button,
+.theme-dark .dropdown-list,
+.theme-dark .owners-dropdown-button,
+.theme-dark .owners-dropdown-list {
+    background: #212326;
+    color: #cccccc;
+    border-color: rgba(204, 204, 204, 0.16);
+}
+
+.theme-dark .dropdown-list-item:hover,
+.theme-dark .owners-dropdown-button:hover {
+    background: #111111;
+    color: #cccccc;
+}
+
+/* Портал в document.body — нет предка .theme-dark, задаём явно */
+.owners-dropdown-list--dark {
+    background: #212326;
+    color: #cccccc;
+    border-color: rgba(204, 204, 204, 0.16);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.owners-dropdown-list--dark li {
+    color: #cccccc;
+}
+
+.owners-dropdown-list--dark li:hover {
+    background: #111111;
+}
+
+.theme-dark .dropdown-arrow {
+    filter: brightness(0) saturate(100%) invert(80%) sepia(0%) saturate(0%) hue-rotate(222deg) brightness(101%) contrast(93%);
+    opacity: 1;
+}
+
+.theme-dark .dropdown-button:hover .dropdown-arrow,
+.theme-dark .dropdown-arrow.open {
+    filter: brightness(0) saturate(100%) invert(96%) sepia(0%) saturate(0%) hue-rotate(257deg) brightness(108%) contrast(89%);
+    opacity: 1;
+}
