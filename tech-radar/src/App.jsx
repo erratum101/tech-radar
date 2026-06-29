@@ -15,8 +15,14 @@ import QuadrantDetailView from "./components/QuadrantDetailView";
 
 const SHARE_QUERY_PARAM = 'radar';
 
+/** Короткая ссылка: радар хранится на сервере, в URL только id после префикса */
+const SHARE_SRV_PREFIX = 'srv:';
+
 /** Префикс для gzip+msgpack (символ не из base64url) */
 const SHARE_MSGPACK_PREFIX = '!';
+
+/** База URL для API шаринга: пусто = тот же origin (прокси Vite в dev, nginx в prod) */
+const shareApiBase = () => (import.meta.env.VITE_SHARE_API_BASE ?? '').replace(/\/$/, '');
 
 /** База деплоя Vite (`/` или `/my-app/`) — чтобы логотип и ассеты работали на хостинге и по подпути */
 const BASE_PATH = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
@@ -343,39 +349,66 @@ const App = () => {
         if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     }, []);
 
-    const loadSharedRadarFromUrl = useCallback(() => {
-        try {
-            const sharedValue = getRadarParamFromLocation();
-            if (!sharedValue) return;
+    const applySharedState = useCallback((sharedState) => {
+        if (!sharedState?.settings) return false;
+        setSettings({
+            ...sharedState.settings,
+            logo: normalizeLogoForDeployment(sharedState.settings.logo),
+        });
+        const parsedItems = Array.isArray(sharedState.allRadarItems) ? sharedState.allRadarItems : [];
+        setAllRadarItems(parsedItems);
+        const uniqueEmployees = new Set();
+        parsedItems.forEach((item) => (item.owners || []).forEach((owner) => uniqueEmployees.add(owner)));
+        setAllEmployees(Array.from(uniqueEmployees).sort());
+        if (sharedState.uiTheme === 'dark' || sharedState.uiTheme === 'light') {
+            setUiTheme(sharedState.uiTheme);
+        }
+        setSelectedDepartment(null);
+        setSelectedQuadrant(null);
+        setNotification({ type: 'alert', message: 'Радар загружен по ссылке.' });
+        return true;
+    }, []);
 
-            const sharedState = decodeSharePayload(sharedValue);
-            if (!sharedState?.settings) return;
+    const loadSharedRadarFromUrl = useCallback(async () => {
+        const sharedValue = getRadarParamFromLocation();
+        if (!sharedValue) return;
 
-            setSettings({
-                ...sharedState.settings,
-                logo: normalizeLogoForDeployment(sharedState.settings.logo),
-            });
-            const parsedItems = Array.isArray(sharedState.allRadarItems) ? sharedState.allRadarItems : [];
-            setAllRadarItems(parsedItems);
-            const uniqueEmployees = new Set();
-            parsedItems.forEach((item) => (item.owners || []).forEach((owner) => uniqueEmployees.add(owner)));
-            setAllEmployees(Array.from(uniqueEmployees).sort());
-            if (sharedState.uiTheme === 'dark' || sharedState.uiTheme === 'light') {
-                setUiTheme(sharedState.uiTheme);
+        if (sharedValue.startsWith(SHARE_SRV_PREFIX)) {
+            const id = sharedValue.slice(SHARE_SRV_PREFIX.length).trim();
+            if (!id) return;
+            try {
+                const base = shareApiBase();
+                const res = await fetch(`${base}/api/radars/${encodeURIComponent(id)}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                const sharedState = parseSharedPayload(data);
+                applySharedState(sharedState);
+            } catch (error) {
+                console.error('Ошибка загрузки радара с сервера:', error);
+                setNotification({
+                    type: 'alert',
+                    message: 'Не удалось загрузить радар по ссылке (сервер недоступен или ссылка устарела).',
+                });
             }
-            setSelectedDepartment(null);
-            setSelectedQuadrant(null);
-            setNotification({ type: 'alert', message: 'Радар загружен по ссылке.' });
+            return;
+        }
+
+        try {
+            const sharedState = decodeSharePayload(sharedValue);
+            applySharedState(sharedState);
         } catch (error) {
             console.error('Ошибка чтения shared-ссылки:', error);
             setNotification({ type: 'alert', message: 'Не удалось загрузить радар из ссылки.' });
         }
-    }, []);
+    }, [applySharedState]);
 
     useEffect(() => {
-        loadSharedRadarFromUrl();
-        window.addEventListener('hashchange', loadSharedRadarFromUrl);
-        return () => window.removeEventListener('hashchange', loadSharedRadarFromUrl);
+        void loadSharedRadarFromUrl();
+        const onHashChange = () => {
+            void loadSharedRadarFromUrl();
+        };
+        window.addEventListener('hashchange', onHashChange);
+        return () => window.removeEventListener('hashchange', onHashChange);
     }, [loadSharedRadarFromUrl]);
     useEffect(() => {
         if (selectedDepartment !== null && settings.departments.length > 0) {
@@ -471,8 +504,30 @@ const App = () => {
 
     const handleShareRadar = async () => {
         try {
-            const encoded = encodeSharePayload(settings, allRadarItems, uiTheme);
-            const shareUrl = buildShareUrlWithPayload(encoded);
+            const payload = buildSharePayload(settings, allRadarItems, uiTheme);
+            const base = shareApiBase();
+            let shareUrl;
+
+            try {
+                const res = await fetch(`${base}/api/radars`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ payload }),
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data?.id) {
+                        shareUrl = buildShareUrlWithPayload(`${SHARE_SRV_PREFIX}${data.id}`);
+                    }
+                }
+            } catch (apiErr) {
+                console.warn('Share API недоступен, используется длинная ссылка в URL', apiErr);
+            }
+
+            if (!shareUrl) {
+                const encoded = encodeSharePayload(settings, allRadarItems, uiTheme);
+                shareUrl = buildShareUrlWithPayload(encoded);
+            }
 
             let copied = false;
             try {
