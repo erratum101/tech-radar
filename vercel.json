@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "installCommand": "npm ci --prefix tech-radar",
+  "buildCommand": "npm run build --prefix tech-radar",
+  "outputDirectory": "tech-radar/dist",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

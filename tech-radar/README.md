@@ -22,8 +22,12 @@ npm run dev:full
 
 ### Деплой на Vercel
 
+**Вариант A (рекомендуется):** в настройках проекта Vercel → **Root Directory** → `tech-radar`. Тогда используется `tech-radar/vercel.json` и папка `api/`.
+
+**Вариант B:** Root Directory пустой (корень репозитория) — в корне лежит `vercel.json`, который ставит зависимости и собирает проект из `tech-radar/` (`npm ci --prefix tech-radar`). API коротких ссылок в этом режиме не поднимется — для шаринга лучше вариант A.
+
 1. Импортируйте репозиторий в [Vercel](https://vercel.com).
-2. В настройках проекта укажите **Root Directory**: `tech-radar` (если репозиторий — монорепо с этой папкой).
+2. Укажите **Root Directory**: `tech-radar` (вариант A).
 3. Framework Preset: **Vite** (или оставьте авто — подхватится `vercel.json`).
 4. Для **коротких ссылок** подключите Redis:
    - Project → **Storage** / **Marketplace** → **Upstash Redis** (или другой Redis с REST API)
